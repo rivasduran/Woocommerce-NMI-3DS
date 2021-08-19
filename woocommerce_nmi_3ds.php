@@ -15,6 +15,16 @@
  *
  * @package cpgw
  */
+wp_enqueue_script('sw_script', plugins_url('/js/wcnmi3ds_script.js', __FILE__));
+wp_localize_script('sw_script', 'sw_script', array(
+    'pluginsUrl' => plugins_url(),
+));
+
+wp_localize_script( 'sw_script', 'my_ajax_object',
+            array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+
+wp_enqueue_script('sw_script', plugins_url('/js/wcnmi3ds_script.js', __FILE__), array('jquery'), '1.0', true);
+//wp_enqueue_script('sw_script_2', plugins_url('/js/pop_up.js', __FILE__), array('jquery'), '1.0', true);
 
 add_action('wp_enqueue_scripts', 'css_api_invu');
 function css_api_invu() {
@@ -104,10 +114,10 @@ if ( ! class_exists( 'Alg_WC_woocommerce_nmi_3ds' ) ) :
 			}
             */
 
-			$this->todos();
+			//$this->todos();
 
 			$menus_nuevos = new Alg_WC_woocommerce_nmi_3ds_News;
-			$menus_nuevos->menus_complemento();
+			//$menus_nuevos->menus_complemento();
 
 			//AGREGAMOS AL MENU PRINCIPAL DEL COMPLEMENTO
             //add_action( 'admin_menu', array($menus_nuevos, 'shmeh_menu') );
@@ -143,12 +153,13 @@ if ( ! class_exists( 'Alg_WC_woocommerce_nmi_3ds' ) ) :
 			$this->core = require_once 'includes/class-alg-wc-woocommerce_nmi_3ds-core.php';
 		}
 
-
+		/*
 		public function todos(){
 			$todos = new Alg_WC_woocommerce_nmi_3ds_News;
 
 			$this->envios = $todos->todos;
 		}
+		*/
 
 		/**
 		 * Admin.
@@ -259,8 +270,10 @@ alg_wc_woocommerce_nmi_3ds();
 /**
  * REGISTRAMOS ENVIOS PARA WOOCOMMERCE
  */
+
 add_action('init', 'crear_Acciones_especiales');
 function crear_Acciones_especiales(){
+	/*
 	$taxonomy = "metodoenvios";
 	$terms = get_terms([
 		'taxonomy' => $taxonomy,
@@ -283,12 +296,13 @@ function crear_Acciones_especiales(){
 		add_action( $variable, array($mandalo_Acciones, 'woocommerce_nmi_3ds_aplicar_envio') );
 
 	}
-
+	*/
 }
 
 /**
  * Agregamos una tabla nueva a los tax
  */
+/*
 //AGREGAMOS LOS METAS PERSONALIZADOS
 $woocommerce_nmi_3ds_news = new Alg_WC_woocommerce_nmi_3ds_News();
 add_action( 'metodoenvios_add_form_fields', array($woocommerce_nmi_3ds_news, 'metodoenvios_add_term_fields') );
@@ -300,4 +314,198 @@ add_action( 'metodoenvios_edit_form_fields', array($woocommerce_nmi_3ds_news, 'm
 //GUARDAMOS EL TAG
 add_action( 'created_metodoenvios', array($woocommerce_nmi_3ds_news, 'metodoenvios_save_term_fields') );
 add_action( 'edited_metodoenvios', array($woocommerce_nmi_3ds_news, 'metodoenvios_save_term_fields') );
+*/
  
+
+
+/**
+ * HAGAMOS UNA PEQUENA PRUEBA
+ * 
+ * NMI_Gateway_Woocommerce_Framework\SV_WC_Helper::wc_add_notice( $user_message, 'error' );
+ */
+
+ //$user_message 
+
+ //MODIFICAREMOS LA FUNCIONALIDAD REMOTA:
+
+ //$remote = new NMI_Gateway_Woocommerce_Remote_Request;
+
+ add_action( 'woocommerce_before_checkout_process', 'initiate_order_testing' , 10, 1 );
+function initiate_order_testing($order_id){
+	/*
+	include( 'woocommerce/includes/emails/class-wc-email-admin-initiate-order.php');
+	$email = new WC_Email_Admin_Initiate_Order();
+	$email->trigger($order_id->id);
+	*/
+	/*
+	$user_message = "HOLA ESTO ES UN ERROR!";
+	NMI_Gateway_Woocommerce_Loader
+	NMI_Gateway_Woocommerce_Framework\SV_WC_Helper::wc_add_notice( $user_message, 'error' );
+	return $user_message;
+	*/
+	
+
+}
+
+
+/**
+ * AGREGAMOS UNA ACCION DE PRUEBAS
+ */
+add_action("wp_footer", "prueba_ajax");
+function prueba_ajax(){
+	//EN ESTA PARTE ENVIAREMOS LA CONSULTA A OTRA FUNCTION
+
+	?>
+
+		<script>
+			
+		</script>
+		<script src="https://cdn.3dsintegrator.com/threeds.2.min.latest.js"></script>
+
+	<?php
+}
+
+
+/**
+ * ESTA ES LA FUNCION
+ */
+add_action('wp_ajax_nopriv_notify_button_click_local_hold', 'enviar_orden_local_hold');
+
+// Hook para usuarios logueados
+add_action('wp_ajax_notify_button_click_local_hold', 'enviar_orden_local_hold');
+
+//ESTE ES EL ENVIO PERO DESDE AJAX, SOLO RECIBE UNA ORDEN (1)
+function enviar_orden_local_hold()
+{
+
+    if (isset($_POST['orden']) && $_POST['orden'] != "") {
+
+        global $current_user;
+        wp_get_current_user();
+
+
+        $order_id = $_POST['orden'];
+
+		/*
+
+        //$orden = detalle_orden($_POST['orden']);
+        $order = new WC_Order($order_id);
+
+        $tipo_envio = 'Servicio Local';
+
+        update_post_meta($order_id, 'tipo_envio', esc_attr(htmlspecialchars($tipo_envio)));
+
+        //GUARDAMOS EL ESTADO DEL ENVIO:
+        $status = "Iniciado";
+        update_post_meta($order_id, 'status', esc_attr(htmlspecialchars($status)));
+
+        $note = __("Agregamos el tipo de envío: " . $tipo_envio . " por " . $current_user->user_login);
+
+        // Add the note
+        $order->add_order_note($note);
+		*/
+
+		//$_SESSION['caramelos'] = "Es caramelo";
+
+		$variable = "------------> Sasha <-------";
+		WC()->session->set('caramelos', $variable);
+
+		$eci = $_POST['eci'];
+		WC()->session->set('eci', $eci);
+
+		$CAVV = $_POST['CAVV'];
+		WC()->session->set('CAVV', $CAVV);
+
+		$Status = $_POST['Status'];
+		WC()->session->set('Status', $Status);
+
+		$protocolVersion = $_POST['protocolVersion'];
+		WC()->session->set('protocolVersion', $protocolVersion);
+
+		$authenticationValue = $_POST['authenticationValue'];
+		WC()->session->set('authenticationValue', $authenticationValue);
+
+		$dsTransactionId = $_POST['dsTransactionId'];
+		WC()->session->set('dsTransactionId', $dsTransactionId);
+
+		/* ESTO ERA DE LA VERSION ANTERIOR
+		$eci = $_POST['eci'];
+		WC()->session->set('eci', $eci);
+		$cavv = $_POST['cavv'];
+		WC()->session->set('cavv', $cavv);
+		$xid = $_POST['xid'];
+		WC()->session->set('xid', $xid);
+		$status = $_POST['status'];
+		WC()->session->set('status', $status);
+		*/
+
+        echo "listo";
+
+
+		//AQUI TOMAREMOS DECISIONES
+		//NMI_Gateway_Woocommerce_Remote_Request
+		
+
+    }else{
+		echo "LA COSA NO NADA!";
+	}
+
+	echo "Al menos llega!";
+
+    exit;
+}
+
+
+/** Admin Enqueue **/
+/*
+function admin_queue( $hook ) {
+    global $post; 
+
+    if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
+        if ( 'product' === $post->post_type ) { 
+            //wp_enqueue_script( 'custom-title-here', get_bloginfo( 'template_directory' ) . '/scripts/custom-script.js', 'jquery', '', true );
+			wp_enqueue_script('sw_script', plugins_url('/js/wcnmi3ds_script.js', __FILE__), array('jquery'), '1.0', true);
+        }
+    }
+}
+add_action( 'admin_enqueue_scripts', 'admin_queue' );
+*/
+
+/**
+ * AGREGAMOS MENSAJE DE LABEL
+ */
+add_action("wp_footer", "labelejemplo");
+function labelejemplo(){
+	?>
+		<label id="messageLabel">El label</label>
+	<?php
+
+	echo "<h1>El sub total es: ".WC()->cart->total."</h1>";
+
+	//DEFINIMOS LA VARIABLE POSIA
+	$variable = "flamengo!";
+
+	WC()->session->set('caramelos', $variable);
+
+	echo "<h1>La session es: ".WC()->session->get('caramelos')."</h1>";
+}
+
+
+/**
+ * CAMBIAMOS EL BOTON DE PAGO
+ */
+add_filter('woocommerce_order_button_html', function(){
+    return '<button class="boton_pago_nuevo button alt"><span class="texto_boton">Comprar Ya</span></button>';
+});
+
+
+add_action("wp_footer", "cargador_espera_checkout2");
+function cargador_espera_checkout2(){
+	?>
+		<div class="padre_de_espera">
+			<div class="seccion_de_espera">
+				<div class="lds-roller simbolo_carga_checkout"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+			</div>
+		</div>
+	<?php
+}

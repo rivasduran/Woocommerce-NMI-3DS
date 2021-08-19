@@ -66,6 +66,9 @@ if ( ! class_exists( 'Alg_WC_WoocommerceNMI3DS_Core' ) ) :
 			//EMAIL DE ENVIO
 			require_once 'class-wc-shippingwoo-emails.php';
 			*/
+
+			//AGREGAMOS LA SECCION PARA AGREGAR NUEVOS METODOS DE ENVIO
+			require_once 'class-wc-woocommerce_nmi_3ds-news.php';
 			
 		}
 
